@@ -4,9 +4,12 @@
   "description": "farm package.json",
   "main": "farm.js",
   "scripts": {
-    "test": "test"
+    "test": "jest"
   },
   "author": "Ozkan Ozsahin",
   "license": "ISC",
-  "keywords": []
+  "keywords": [],
+  "dependencies": {
+    "jest": "^28.1.3"
+  }
 }
