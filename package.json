@@ -1,0 +1,12 @@
+{
+  "name": "npm-init-farm",
+  "version": "1.0.0",
+  "description": "farm package.json",
+  "main": "farm.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Ozkan Ozsahin",
+  "license": "ISC",
+  "keywords": []
+}
