@@ -1,5 +1,5 @@
 const { getYieldForPlant, getYieldForCrop, getTotalYield, getCostsForCrop, 
-    getRevenueForCrop, getProfitForCrop, getTotalProfit, } = require("./farm");
+     getProfitForCrop, getTotalProfit, } = require("./farm");
 
 // Calculating Yield per plant
 describe("getYieldForPlant", () => {
@@ -184,13 +184,14 @@ test("Calculate total yield with 0 amount", () => {
 
     expect(getTotalYield({vegetables})).toBe(0);
 });
+    });
 
 test("Calculate total yield WITH environmental factors", () => {
     const environmentFactors = { sun: "high", wind: "high" };
 
     expect(getTotalYield({ vegetables }, environmentFactors)).toBe(0);
   });
-});
+
 
 
     // Calculate cost for a crop
@@ -225,9 +226,10 @@ test("Calculate total yield WITH environmental factors", () => {
           expect(getCostsForCrop(pumpkin)).toBe(70);
           expect(getCostsForCrop(tomatoes)).toBe(160);
         });
+      });
 
         // Calculate revenue for a crop (without environment factors)
-        describe("getProfitForCrop", () => {
+        describe("getProfitForCrop", () => [
             test("calculate the profit for a crop", () => {
               const corn = {
                 name: "corn",
@@ -259,7 +261,7 @@ test("Calculate total yield WITH environmental factors", () => {
               expect(getProfitForCrop(corn)).toBe(750);
               expect(getProfitForCrop(pumpkin)).toBe(490);
               expect(getProfitForCrop(tomatoes)).toBe(560);
-            });
+            }),
 
             // Calculate profit for a crop without environmental factors
 
@@ -296,7 +298,7 @@ test("Calculate total yield WITH environmental factors", () => {
                   expect(getProfitForCrop(pumpkin)).toBe(490);
                   expect(getProfitForCrop(tomatoes)).toBe(560);
                 });
-
+              
                 // Calculate profit for multiple crops without environmental factors
                 describe("getTotalProfit", () => {
                     test("calculate the profit for multiple crops", () => {
@@ -332,9 +334,7 @@ test("Calculate total yield WITH environmental factors", () => {
                         { crop: pumpkin, numCrops: 2 },
                         { crop: pumpkin, numCrops: 4 },
                       ];
-                    
-                    });
-                
+                      
+             });
 
-                
-                
+                });
