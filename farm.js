@@ -1,31 +1,19 @@
 // Get yield for vegetables with environmental factors
 
-const getYieldForPlant = (vegetables, factors) => {
-  let getYield;
-  const fullYield = 100;
-  if (!factors) {
-    // yield with NO environmental factors
-    getYield = vegetables.yield;
-    return getYield;
-  } else {
-    // yield WITH environmental factors
-    let sunValue = factors.sun;
-    let windValue = factors.wind;
-    if (sunValue === "low" || sunValue === "medium") {
-      getYield = Math.round(
-        vegetables.yield *
-          ((fullYield - Math.abs(vegetables.factor.sun[sunValue])) / 100) *
-          ((fullYield - Math.abs(vegetables.factor.wind[windValue])) / 100)
-      );
-    } else {
-      getYield = Math.round(
-        vegetables.yield *
-          ((fullYield + vegetables.factor.sun[sunValue]) / 100) *
-          ((fullYield - Math.abs(vegetables.factor.wind[windValue])) / 100)
-      );
-    }
-    return getYield;
-  }
+const getYieldForPlant = (vegetable, environmentFactors) => {
+  if (!environmentFactors) return vegetable.yield;
+
+  let yieldWithSun = 0;
+  let yieldTotal = 0;
+  
+
+  const sun = vegetable.factor.sun[environmentFactors.sun];
+  const wind = vegetable.factor.wind[environmentFactors.wind];
+
+  yieldWithSun = vegetable.yield * (1 + sun / 100);
+  yieldTotal = yieldWithSun * (1 + wind / 100);
+
+  return yieldTotal;
 };
 
 // Get yield for crop,
@@ -97,4 +85,3 @@ module.exports = {
   getProfitForCrop,
   // getTotalProfit,
 };
-    

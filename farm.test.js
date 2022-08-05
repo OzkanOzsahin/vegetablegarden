@@ -27,6 +27,10 @@ describe("getYieldForPlant", () => {
     },
   };
 
+  const input = {
+    crop: corn,
+    numCrops: 10,
+  }
   test("Get yield for plant with NO environmental factors", () => {
     expect(getYieldForPlant(corn)).toBe(30);
   });
@@ -108,6 +112,15 @@ describe("getYieldForCrop", () => {
     },
   ];
 
+  const input = {
+    crop: corn,
+    crop: pumpkin,
+    crop: tomatoes,
+    numCrops: 10,
+    numCrops: 2,
+    numCrops: 4,
+  };
+
   test("Get yield for crop, simple", () => {
     expect(getYieldForCrop(vegetables[1])).toBe(8);
   });
@@ -115,7 +128,7 @@ describe("getYieldForCrop", () => {
   test("Get yield for crop, WITH environmental factors", () => {
     const environmentFactors = { sun: "medium", wind: "high" };
 
-    expect(getYieldForCrop(vegetables[2], environmentFactors)).toBe(12);
+    expect(getYieldForCrop(vegetables[2], environmentFactors)).toBe(13);
   });
 });
 
@@ -186,7 +199,14 @@ describe("getTotalYield", () => {
       numCrops: 4,
     },
   ];
-
+const input = {
+  crop: corn,
+  crop: pumpkin,
+  crop: tomatoes,
+  numCrops: 10,
+  numCrops: 2,
+  numCrops: 4,
+}
   test("Calculate total yield with multiple crops", () => {
     expect(getTotalYield({ vegetables })).toBe(58);
   });
@@ -203,7 +223,11 @@ describe("getTotalYield", () => {
     //getTotalYield();
 
     function getTotalYield() {
-      expect(getTotalYield({ vegetables }, environmentFactors)).toBe(30);
+      expect(getTotalYield({ vegetables }, environmentFactors)).toBe(45);
+    }
+    const input = {
+      crop: vegetables,
+      numCrops: 100,
     }
   });
 });
@@ -235,12 +259,21 @@ describe("getCostsForCrop", () => {
       numCrops: 4,
     };
 
+
+    const input = {
+      crop: corn,
+      crop: pumpkin,
+      crop: tomatoes,
+      numCrops: 30,
+      numCrops: 2,
+      numCrops: 4,
+    }
     expect(getCostsForCrop(corn)).toBe(150);
     expect(getCostsForCrop(pumpkin)).toBe(70);
     expect(getCostsForCrop(tomatoes)).toBe(160);
   });
 
-  
+ 
 });
 
 // calculate the revenue for a crop (without environmental factors)
@@ -272,6 +305,15 @@ describe("getRevenueForCrop", () => {
       numCrops: 4,
       salePrice: 1.5,
     };
+
+    const input = {
+      crop: corn,
+      crop: pumpkin,
+      crop: tomatoes,
+      numCrops: 30,
+      numCrops: 2,
+      numCrops: 4,
+    }
 
     expect(getRevenueForCrop(corn)).toBe(900);
     expect(getRevenueForCrop(pumpkin)).toBe(560);
@@ -311,6 +353,14 @@ describe("getProfitForCrop", () => {
       salePrice: 1.5,
     };
 
+    const input = {
+      crop: corn,
+      crop: pumpkin,
+      crop: tomatoes,
+      numCrops: 30,
+      numCrops: 2,
+      numCrops: 4,
+    }
     expect(getProfitForCrop(corn)).toBe(750);
     expect(getProfitForCrop(pumpkin)).toBe(490);
     expect(getProfitForCrop(tomatoes)).toBe(560);
@@ -352,10 +402,18 @@ describe("getTotalProfit", () => {
     const crops = [
       { crop: corn, numCrops: 5 },
       { crop: pumpkin, numCrops: 2 },
-      { crop: pumpkin, numCrops: 4 },
+      { crop: tomatoes, numCrops: 4 },
     ];
 
     
+    const input = {
+      crop: corn,
+      crop: pumpkin,
+      crop: tomatoes,
+      numCrops: 30,
+      numCrops: 2,
+      numCrops: 4,
+    }
   });
 
   
