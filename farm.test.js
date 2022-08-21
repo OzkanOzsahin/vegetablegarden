@@ -8,413 +8,257 @@ const {
   getTotalProfit,
 } = require("./farm");
 
-// CALCULATE THE YIELD FOR PLANT
 describe("getYieldForPlant", () => {
   const corn = {
-    name: "corn",
-    yield: 30,
-    factor: {
-      sun: {
-        low: -50,
-        medium: 0,
-        high: 50,
-      },
-      wind: {
-        low: 0,
-        medium: -30,
-        high: -60,
-      },
-    },
+      name: "corn",
+      yield: 30,
+      factors: {
+          sun: {
+              low: -50,
+              medium: 0,
+              high: 75,
+          },
+      }
   };
-
-  const input = {
-    crop: corn,
-    numCrops: 10,
-  }
-  test("Get yield for plant with NO environmental factors", () => {
-    expect(getYieldForPlant(corn)).toBe(30);
+  const environmentFactors = {
+      sun: "high",
+  };
+  test("Get yield for plant with no environment factors", () => {
+      expect(getYieldForPlant(corn)).toBe(30);
   });
-
-  test("Get yield for plant WITH environmental factors", () => {
-    const environmentFactors = { sun: "medium", wind: "high" };
-
-    
-    expect(getYieldForPlant(corn, environmentFactors)).toBe(12); // sun: medium, wind: high
-    
+  test("Get yield for plant, take environmental factors into account", () => {
+      expect(getYieldForPlant(corn, environmentFactors)).toBe(52.5);
   });
 });
 
-// CALCULATE YIELD FOR CROP
 describe("getYieldForCrop", () => {
   const corn = {
-    name: "corn",
-    yield: 3,
-    factor: {
-      sun: {
-        low: -50,
-        medium: 0,
-        high: 50,
-      },
-      wind: {
-        low: 0,
-        medium: -30,
-        high: -60,
-      },
-    },
+      name: "corn",
+      yield: 3,
+      factors: {
+          sun: {
+              low: -50,
+              medium: 0,
+              high: 75,
+          },
+          wind: {
+              low: 0,
+              medium: 0,
+              high: -25,
+          },
+      }
   };
-
-  const pumpkin = {
-    name: "pumpkin",
-    yield: 4,
-    factor: {
-      sun: {
-        low: -40,
-        medium: 0,
-        high: 60,
-      },
-      wind: {
-        low: 0,
-        medium: -20,
-        high: -50,
-      },
-    },
-  };
-
-  const tomatoes = {
-    name: "tomatoes",
-    yield: 5,
-    factor: {
-      sun: {
-        low: -30,
-        medium: 10,
-        high: 70,
-      },
-      wind: {
-        low: 0,
-        medium: -30,
-        high: -40,
-      },
-    },
-  };
-
-  const vegetables = [
-    {
+  const input = {
       crop: corn,
       numCrops: 10,
-    },
-    {
-      crop: pumpkin,
-      numCrops: 2,
-    },
-    {
-      crop: tomatoes,
-      numCrops: 4,
-    },
-  ];
-
-  const input = {
-    crop: corn,
-    crop: pumpkin,
-    crop: tomatoes,
-    numCrops: 10,
-    numCrops: 2,
-    numCrops: 4,
   };
-
+  const environmentFactors = {
+      sun: "high",
+      wind: "high",
+  };
   test("Get yield for crop, simple", () => {
-    expect(getYieldForCrop(vegetables[1])).toBe(8);
+      expect(getYieldForCrop(input)).toBe(30);
   });
-
-  test("Get yield for crop, WITH environmental factors", () => {
-    const environmentFactors = { sun: "medium", wind: "high" };
-
-    expect(getYieldForCrop(vegetables[2], environmentFactors)).toBe(13);
+  test("Get yield for crop, take environmental factors into account", () => {
+      expect(getYieldForCrop(input, environmentFactors)).toBe(45);
   });
 });
 
-//CALCULATE THE TOTAL YIELD FOR MULTIPLE CROPS
 describe("getTotalYield", () => {
   const corn = {
-    name: "corn",
-    yield: 3,
-    factor: {
-      sun: {
-        low: -50,
-        medium: 0,
-        high: 50,
-      },
-      wind: {
-        low: 0,
-        medium: -30,
-        high: -60,
-      },
-    },
+      name: "corn",
+      yield: 3,
+      factors: {
+          sun: {
+              low: -50,
+              medium: 0,
+              high: 75,
+          },
+      }
   };
-
   const pumpkin = {
-    name: "pumpkin",
-    yield: 4,
-    factor: {
-      sun: {
-        low: -40,
-        medium: 0,
-        high: 60,
-      },
-      wind: {
-        low: 0,
-        medium: -20,
-        high: -50,
-      },
-    },
+      name: "pumpkin",
+      yield: 4,
+      factors: {
+          sun: {
+              low: -25,
+              medium: 25,
+              high: 50,
+          },
+      }
   };
-
-  const tomatoes = {
-    name: "tomatoes",
-    yield: 5,
-    factor: {
-      sun: {
-        low: -30,
-        medium: 10,
-        high: 70,
-      },
-      wind: {
-        low: 0,
-        medium: -30,
-        high: -40,
-      },
-    },
-  };
-
-  let vegetables = [
-    {
-      crop: corn,
-      numCrops: 10,
-    },
-    {
-      crop: pumpkin,
-      numCrops: 2,
-    },
-    {
-      crop: tomatoes,
-      numCrops: 4,
-    },
-  ];
-const input = {
-  crop: corn,
-  crop: pumpkin,
-  crop: tomatoes,
-  numCrops: 10,
-  numCrops: 2,
-  numCrops: 4,
-}
-  test("Calculate total yield with multiple crops", () => {
-    expect(getTotalYield({ vegetables })).toBe(58);
-  });
-
-  test("Calculate total yield with 0 amount", () => {
-    let vegetables = [{ crop: corn, numCrops: 0 }];
-
-    expect(getTotalYield({ vegetables })).toBe(0);
-  });
-
-  test("Calculate total yield WITH environmental factors", () => {
-    const environmentFactors = { sun: "high", wind: "high" };
-
-    //getTotalYield();
-
-    function getTotalYield() {
-      expect(getTotalYield({ vegetables }, environmentFactors)).toBe(45);
-    }
-    const input = {
-      crop: vegetables,
-      numCrops: 100,
-    }
-  });
-});
-
-// Calculate the cost for a crop
-describe("getCostsForCrop", () => {
-  test("Calculate the cost for a crop", () => {
-    const corn = {
-      name: "corn",
-      yield: 3,
-      sowingPrice: 1,
-      plantsPerCrop: 30,
-      numCrops: 5,
-    };
-
-    const pumpkin = {
-      name: "pumpkin",
-      yield: 4,
-      sowingPrice: 1,
-      plantsPerCrop: 35,
-      numCrops: 2,
-    };
-
-    const tomatoes = {
-      name: "tomatoes",
-      yield: 5,
-      sowingPrice: 1,
-      plantsPerCrop: 40,
-      numCrops: 4,
-    };
-
-
-    const input = {
-      crop: corn,
-      crop: pumpkin,
-      crop: tomatoes,
-      numCrops: 30,
-      numCrops: 2,
-      numCrops: 4,
-    }
-    expect(getCostsForCrop(corn)).toBe(150);
-    expect(getCostsForCrop(pumpkin)).toBe(70);
-    expect(getCostsForCrop(tomatoes)).toBe(160);
-  });
-
- 
-});
-
-// calculate the revenue for a crop (without environmental factors)
-describe("getRevenueForCrop", () => {
-  test("calculate the revenue for a crop", () => {
-    const corn = {
-      name: "corn",
-      yield: 3,
-      sowingPrice: 1,
-      plantsPerCrop: 30,
-      numCrops: 5,
-      salePrice: 2,
-    };
-
-    const pumpkin = {
-      name: "pumpkin",
-      yield: 4,
-      sowingPrice: 1,
-      plantsPerCrop: 35,
-      numCrops: 2,
-      salePrice: 2,
-    };
-
-    const tomatoes = {
-      name: "tomatoes",
-      yield: 3,
-      sowingPrice: 1,
-      plantsPerCrop: 40,
-      numCrops: 4,
-      salePrice: 1.5,
-    };
-
-    const input = {
-      crop: corn,
-      crop: pumpkin,
-      crop: tomatoes,
-      numCrops: 30,
-      numCrops: 2,
-      numCrops: 4,
-    }
-
-    expect(getRevenueForCrop(corn)).toBe(900);
-    expect(getRevenueForCrop(pumpkin)).toBe(560);
-    expect(getRevenueForCrop(tomatoes)).toBe(720);
-  });
-
-  
-});
-
-//  calculate the profit for a crop (without environmental factors)
-describe("getProfitForCrop", () => {
-  test("calculate the profit for a crop", () => {
-    const corn = {
-      name: "corn",
-      yield: 3,
-      sowingPrice: 1,
-      plantsPerCrop: 30,
-      numCrops: 5,
-      salePrice: 2,
-    };
-
-    const pumpkin = {
-      name: "pumpkin",
-      yield: 4,
-      sowingPrice: 1,
-      plantsPerCrop: 35,
-      numCrops: 2,
-      salePrice: 2,
-    };
-
-    const tomatoes = {
-      name: "tomatoes",
-      yield: 3,
-      sowingPrice: 1,
-      plantsPerCrop: 40,
-      numCrops: 4,
-      salePrice: 1.5,
-    };
-
-    const input = {
-      crop: corn,
-      crop: pumpkin,
-      crop: tomatoes,
-      numCrops: 30,
-      numCrops: 2,
-      numCrops: 4,
-    }
-    expect(getProfitForCrop(corn)).toBe(750);
-    expect(getProfitForCrop(pumpkin)).toBe(490);
-    expect(getProfitForCrop(tomatoes)).toBe(560);
-  });
-
-  
-});
-
-// calculate the profit for multiple crops (without environmental factors)
-describe("getTotalProfit", () => {
-  test("calculate the profit for multiple crops", () => {
-    const corn = {
-      name: "corn",
-      yield: 3,
-      sowingPrice: 1,
-      plantsPerCrop: 30,
-      numCrops: 5,
-      salePrice: 2,
-    };
-
-    const pumpkin = {
-      name: "pumpkin",
-      yield: 4,
-      sowingPrice: 1,
-      plantsPerCrop: 35,
-      numCrops: 2,
-      salePrice: 2,
-    };
-
-    const tomatoes = {
-      name: "tomatoes",
-      yield: 3,
-      sowingPrice: 1,
-      plantsPerCrop: 40,
-      numCrops: 4,
-      salePrice: 1.5,
-    };
-
-    const crops = [
+  const crops = [
       { crop: corn, numCrops: 5 },
       { crop: pumpkin, numCrops: 2 },
-      { crop: tomatoes, numCrops: 4 },
-    ];
-
-    
-    const input = {
-      crop: corn,
-      crop: pumpkin,
-      crop: tomatoes,
-      numCrops: 30,
-      numCrops: 2,
-      numCrops: 4,
-    }
+  ];
+  const environmentFactors = {
+      sun: "high",
+  };
+  test("Calculate total yield with multiple crops, environmental factors NOT included", () => {
+      expect(getTotalYield({ crops })).toBe(23);
   });
+  test("Calculate total yield with multiple crops, take environmental factors into account", () => {
+      expect(getTotalYield({ crops }, environmentFactors)).toBe(38.25);
+  });
+  test("Calculate total yield with 0 amount", () => {
+      const corn = {
+          name: "corn",
+          yield: 3,
+      };
+      const crops = [{ crop: corn, numCrops: 0 }];
+      expect(getTotalYield({ crops })).toBe(0);
+  });
+});
 
-  
+describe("getCostsForCrop", () => {
+  const corn = {
+      name: "corn",
+      cost: 1,
+  }
+  const input = {
+      crop: corn,
+      numCrops: 20,
+  };
+  test("Calculate costs for a crop", () => {
+      expect(getCostsForCrop(input)).toBe(20);
+  });
+  test("Calculate costs for a crop (corn) with 0 amount", () => {
+      const input = {
+          crop: corn,
+          numCrops: 0,
+      };
+      expect(getCostsForCrop(input)).toBe(0);
+  })
+});
+
+describe("getRevenueForCrop", () => {
+  const pumpkin = {
+      name: "pumpkin",
+      yield: 4,
+      cost: 1.5,
+      sale_price: 4,
+      factors: {
+          sun: {
+              low: -25,
+              medium: 25,
+              high: 50,
+          },
+      }
+  };
+  const input = {
+      crop: pumpkin,
+      numCrops: 5,
+  };
+  const environmentFactors = {
+      sun: "high",
+  };
+
+  test("Calculate revenue for a crop, no environmental factors", () => {
+      expect(getRevenueForCrop(input)).toBe(80);
+  });
+  test("Calculate revenue for a crop, take environmental factors into account", () => {
+      expect(getRevenueForCrop(input, environmentFactors)).toBe(120);
+  });
+  test("Calculate revenue for a crop with 0 amount", () => {
+      const input = {
+          crop: pumpkin,
+          numCrops: 0,
+      };
+      expect(getRevenueForCrop(input)).toBe(0);
+  });
+});
+
+describe("getProfitForCrop", () => {
+  const pumpkin = {
+      name: "pumpkin",
+      yield: 4,
+      cost: 1.5,
+      sale_price: 4,
+      factors: {
+          sun: {
+              low: -25,
+              medium: 25,
+              high: 50,
+          },
+      }
+  };
+  const input = {
+      crop: pumpkin,
+      numCrops: 5,
+  };
+  const environmentFactors = {
+      sun: "high",
+  };
+  test("Calcultate profit for a crop, no environmental factors", () => {
+      expect(getProfitForCrop(input)).toBe(72.5);
+  });
+  test("Calcultate profit for a crop, take environmental factors into account", () => {
+      expect(getProfitForCrop(input, environmentFactors)).toBe(112.5);
+  });
+  test("Calcultate profit for a crop with 0 amount", () => {
+      const input = {
+          crop: pumpkin,
+          numCrops: 0,
+      };
+      expect(getProfitForCrop(input)).toBe(0);
+  });
+});
+
+describe("getTotalProfit", () => {
+  const corn = {
+      name: "corn",
+      yield: 3,
+      cost: 1,
+      sale_price: 3,
+      factors: {
+          sun: {
+              low: -50,
+              medium: 0,
+              high: 75,
+          },
+          wind: {
+              low: 0,
+              medium: 0,
+              high: -25,
+          },
+      }
+  };
+  const pumpkin = {
+      name: "pumpkin",
+      yield: 4,
+      cost: 1.5,
+      sale_price: 4,
+      factors: {
+          sun: {
+              low: -25,
+              medium: 25,
+              high: 50,
+          },
+          wind: {
+              low: 25,
+              medium: 0,
+              high: -25,
+          },
+      }
+  }; const crops = [
+      { crop: corn, numCrops: 1 },
+      { crop: pumpkin, numCrops: 1 },
+  ];
+  const environmentFactors = {
+      sun: "high",
+      wind: "high",
+  };
+  test("Calculate profit for multiple crops, no environmental factor", () => {
+      expect(getTotalProfit(crops)).toBe(22.5);
+  });
+  test("Calculate profit for multiple crops, environmental factors included", () => {
+      expect(getTotalProfit(crops, environmentFactors)).toBe(31);
+  });
+  test("Calculate profit for multiple crops with 0 amount", () => {
+      const crops = [
+          { crop: corn, numCrops: 0 },
+          { crop: pumpkin, numCrops: 0 },
+      ];
+      expect(getTotalProfit(crops)).toBe(0);
+  });
 });
